@@ -19,7 +19,7 @@
 // @module dustbin.js
 //----------------------------------------------------------------------------------------------------------------------
 
-(function()
+function buildDustbin()
 {
     function BinStorage(storage)
     {
@@ -204,9 +204,26 @@
         return this.local.removeAllKeys(bin);
     }; // end removeAllKeys
 
-    //------------------------------------------------------------------------------------------------------------------
+    return DustBin;
+} // end buildDustbin
 
-    // Put the bin object in the global namespace
+//----------------------------------------------------------------------------------------------------------------------
+
+var DustBin = buildDustbin();
+
+// Handle RequireJS support
+if(typeof define != "function")
+{
+    // Set a global dustbin object.
     window.dustbin = new DustBin();
-}());
+}
+else
+{
+    define("dustbin", function()
+    {
+        // Return the dustbin object.
+        return new DustBin();
+    });
+} // end if
+
 //----------------------------------------------------------------------------------------------------------------------

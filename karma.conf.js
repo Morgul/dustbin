@@ -8,16 +8,21 @@ basePath = '';
 
 // list of files / patterns to load in the browser
 files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  'dustbin.js',
-  'tests/*.spec.js'
+    JASMINE,
+    JASMINE_ADAPTER,
+    'dustbin.js',
+    'tests/dustbin.spec.js',
+    'tests/dustbin.session.spec.js',
+
+    // RequireJS Tests; must happen after other tests.
+    REQUIRE,
+    'tests/dustbin.requirejs.spec.js'
 ];
 
 
 // list of files to exclude
 exclude = [
-  
+
 ];
 
 

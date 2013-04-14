@@ -37,6 +37,21 @@ obj = dustbin.get("testBin")["testObj"];
 
 That's all there is to it!
 
+## RequireJS support
+
+Recently, I've added support for RequireJS. While it's optional (and will remain so), the support seems to work very
+well. You can simply use it like any other RequireJS module:
+
+```javascript
+require(['dustbin'], function(dustbin)
+{
+    var key = dustbin.store("testBin", obj);
+});
+```
+
+Though the support has been tested (and is part of the unit tests), I still consider the RequireJS support experimental.
+If you encounter any issues, please file a ticket. (Make sure to include a test case!)
+
 ### Auto-generated Keys
 
 You're not required to have a key to store your object under. Dustbin will automatically generate a key for you if you
@@ -144,5 +159,17 @@ I have time. If you would like to implement these features, I am more than willi
 ## Contribution
 
 As mentioned, I'm more than willing to accept pull requests. I will require you to follow
-[my code format](https://github.com/Morgul/dustbin/wiki/Code-Style). (I know it's not exactly standard for Javascript,
-but I find it intensely more readable than most. And, this is my project, so  deal with it.)
+[my code format](https://github.com/Morgul/dustbin/wiki/Code-Style). I also reserve the rights to reject any features
+that rely heavily on experimental features, or lock users into one way system for using Dustbin. (There's a readon why
+the RequireJS support is optional.)
+
+### Reporting issues
+
+I'm more than happy to have issues reported! All that I ask is a clear description of the problem, along with a test
+case. I don't have the time or inclination to wade through your application to try and discover the causes for a bug. So,
+whenever possible, please try and give me a small test case (Or, preferably, a pull-request with new unit tests that
+show the failure!)
+
+That all being said, don't wait to file a bug until you have a use case. I'd rather know there's a potential issue asap;
+you can feel free to file an issue, and attach the test case to it later. Just make it clear you're working on it. If
+you're having trouble isolating it, I'm more than willing to lend a hand, provided I have the time. Feel free to ask.
