@@ -106,7 +106,7 @@ var cats = dustbin.query("pets", {animal: "cat"});
 var pets = dustbin.query("pets", {});
 ```
 
-Right now the only thing supported is pure _equality, **not** _equivalence_. Also, this is basically two nested `forEach`
+Right now the only thing supported is pure _equality_, **not** _equivalence_. Also, this is basically two nested `forEach`
 calls, so performance isn't as good as it could be. I'll be looking at improving this in the future, but for now it
 should meet most needs.
 
