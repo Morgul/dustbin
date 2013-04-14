@@ -117,6 +117,6 @@ I have time. If you would like to implement these features, I am more than willi
 
 ## Contribution
 
-As mentioned, I'm more than willing to accept pull requests. I will require you to follow [my code format](/wiki/Code-Style).
-(I know it's not exactly standard for Javascript, but I find it intensely more readable than most. And, this is my
-project, so  deal with it.)
+As mentioned, I'm more than willing to accept pull requests. I will require you to follow
+[my code format](https://github.com/Morgul/dustbin/wiki/Code-Style). (I know it's not exactly standard for Javascript,
+but I find it intensely more readable than most. And, this is my project, so  deal with it.)
