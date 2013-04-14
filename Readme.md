@@ -37,7 +37,7 @@ obj = dustbin.get("testBin")["testObj"];
 
 That's all there is to it!
 
-## RequireJS support
+### RequireJS support
 
 Recently, I've added support for RequireJS. While it's optional (and will remain so), the support seems to work very
 well. You can simply use it like any other RequireJS module:
