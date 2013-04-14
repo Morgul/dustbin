@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 // Tests for DustBin
 //
-// @module dustbin.spec.js
+// @module dustdustbin.spec.js
 //----------------------------------------------------------------------------------------------------------------------
 
 describe("DustBin Session Store", function()
@@ -11,7 +11,7 @@ describe("DustBin Session Store", function()
         var key;
         var testStore = function()
         {
-            key = bin.session.store("test_bin", "test_key", {foo:"bar"});
+            key = dustbin.session.store("test_bin", "test_key", {foo:"bar"});
         };
 
         expect(testStore).not.toThrow();
@@ -23,7 +23,7 @@ describe("DustBin Session Store", function()
         var key;
         var testStore = function()
         {
-            key = bin.session.store("test_bin", {foo:"bar"});
+            key = dustbin.session.store("test_bin", {foo:"bar"});
         };
 
         expect(testStore).not.toThrow();
@@ -33,12 +33,12 @@ describe("DustBin Session Store", function()
     it("allows stored objects to be retrieved by the key they were stored with.", function()
     {
         var testObj = {foo:"bar"};
-        var key = bin.session.store("test_bin", "test_key", testObj) ;
+        var key = dustbin.session.store("test_bin", "test_key", testObj) ;
 
         var obj;
         var testGet = function()
         {
-            obj = bin.session.get("test_bin", key);
+            obj = dustbin.session.get("test_bin", key);
         };
 
         expect(testGet).not.toThrow();
@@ -48,12 +48,12 @@ describe("DustBin Session Store", function()
     it("allows stored objects to be retrieved by the key that was auto-generated.", function()
     {
         var testObj = {foo:"bar"};
-        var key = bin.session.store("test_bin", testObj) ;
+        var key = dustbin.session.store("test_bin", testObj) ;
 
         var obj;
         var testGet = function()
         {
-            obj = bin.session.get("test_bin", key);
+            obj = dustbin.session.get("test_bin", key);
         };
 
         expect(testGet).not.toThrow();
@@ -63,12 +63,12 @@ describe("DustBin Session Store", function()
     it("allows retrieval of the bin directly.", function()
     {
         var testObj = {foo:"bar"};
-        var key = bin.session.store("test_bin", testObj) ;
+        var key = dustbin.session.store("test_bin", testObj) ;
 
         var obj;
         var testGet = function()
         {
-            obj = bin.session.get("test_bin")[key];
+            obj = dustbin.session.get("test_bin")[key];
         };
 
         expect(testGet).not.toThrow();
@@ -78,29 +78,29 @@ describe("DustBin Session Store", function()
     it("allows removal by key.", function()
     {
         var testObj = {foo:"bar"};
-        var key = bin.session.store("test_bin", testObj) ;
+        var key = dustbin.session.store("test_bin", testObj) ;
 
         var obj;
         var testGet = function()
         {
-            bin.session.remove("test_bin", key);
-            obj = bin.session.get("test_bin")[key];
+            dustbin.session.remove("test_bin", key);
+            obj = dustbin.session.get("test_bin")[key];
         };
 
         expect(testGet).not.toThrow();
         expect(obj).not.toBeDefined();
     });
 
-    it("allows removal of the entire bin.", function()
+    it("allows removal of the entire dustbin.", function()
     {
         var testObj = {foo:"bar"};
-        var key = bin.session.store("test_bin", testObj);
+        var key = dustbin.session.store("test_bin", testObj);
 
         var binObj;
         var testGet = function()
         {
-            bin.session.removeAllKeys("test_bin");
-            binObj = bin.session.get("test_bin");
+            dustbin.session.removeAllKeys("test_bin");
+            binObj = dustbin.session.get("test_bin");
         };
 
         expect(testGet).not.toThrow();
