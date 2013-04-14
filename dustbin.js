@@ -101,9 +101,36 @@
         delete this.storage[bin];
     }; // end removeAllKeys
 
-    BinStorage.prototype.query = function(query)
+    BinStorage.prototype.query = function(bin, query)
     {
-        console.error("Not Implemented yet!")
+        query = query || {};
+        var binObj = this._get_bin(bin);
+        var matches = [];
+
+        Object.keys(binObj).forEach(function(key)   //TODO: Apparently for loops are much faster than forEach.
+        {
+            var content = binObj[key];
+            var match = true;
+
+            // Check to see if object matches
+            Object.keys(query).forEach(function(objKey)   //TODO: Apparently for loops are much faster than forEach.
+            {
+                if(content[objKey] != query[objKey])
+                {
+                    match = false;
+                } // end if
+            }); // end for
+
+            if(match)
+            {
+                if(matches.indexOf(content) < 0)
+                {
+                    matches.push(content);
+                } // end if
+            } // end if
+        }); // end forEach
+
+        return matches;
     }; // end query
 
     //-------------------------------------------------------------------------
@@ -161,6 +188,11 @@
     {
         return this.local.store(bin, key, value);
     }; // end store
+
+    DustBin.prototype.query = function(bin, query)
+    {
+        return this.local.query(bin, query);
+    }; // end query
 
     DustBin.prototype.remove = function(bin, key)
     {

@@ -85,6 +85,31 @@ You can even remove all objects from a bin:
 dustbin.removeAllKeys("testBin");
 ```
 
+### Basic Query support
+
+Currently, only basic query support has been added. You will need to construct an object containing `key` and `value`
+where you want back a list of object that have `key` equal to `value`. Here's an example:
+
+```javascript
+var alex = {animal:"cat", name: "alex", age: 4};
+var izzy = {animal:"cat", name: "izzy", age: 4};
+var baal = {animal:"snake", name: "baal", age: 2};
+
+dustbin.store("pets", alex);
+dustbin.store("pets", izzy);
+dustbin.store("pets", baal);
+
+// `cats` will be equal to `[alex, izzy]`
+var cats = dustbin.query("pets", {animal: "cat"});
+
+// `pets` will be equal to `[alex, izzy, baal]`
+var pets = dustbin.query("pets", {});
+```
+
+Right now the only thing supported is pure _equivalence_, **not** equality. Also, this is basically two nested `forEach`
+calls, so performance isn't as good as it could be. I'll be looking at improving this in the future, but for now it
+should meet most needs.
+
 ### Session store support
 
 All operations can also be done on the session store. By default, the `dustbin` object's functions are simply wrappers
@@ -108,8 +133,9 @@ except the inherent difference of session storage (all objects only last for the
 
 ## Status
 
-Currently, all unit tests pass, and the basic functionality is there. You can get, remove and store objects by key. As
-near as I can tell, this code is simple enough it can be used in a production site.
+Currently, all unit tests pass, and the basic functionality is there. You can get, remove and store objects by key.
+There is also basic query support, which I estimate will work for 70% of most use cases. As near as I can tell, this
+code is simple enough it can be used in a production site.
 
 That being said, I would very much like to add support for [map/reduce](http://docs.basho.com/riak/latest/tutorials/querying/MapReduce/)
 and a [django-like query api](https://docs.djangoproject.com/en/dev/ref/models/querysets/#id4). I will work on that as

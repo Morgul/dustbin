@@ -6,6 +6,15 @@
 
 describe("DustBin Session Store", function()
 {
+    afterEach(function()
+    {
+        Object.keys(sessionStorage).forEach(function(key)
+        {
+
+            delete sessionStorage[key];
+        });
+    });
+
     it("allows storage of objects.", function()
     {
         var key;
@@ -105,6 +114,29 @@ describe("DustBin Session Store", function()
 
         expect(testGet).not.toThrow();
         expect(binObj).toEqual({});
+    });
+
+    it("allows basic query by values.", function()
+    {
+        var alex = {animal:"cat", name: "alex", age: 4};
+        var izzy = {animal:"cat", name: "izzy", age: 4};
+        var baal = {animal:"snake", name: "baal", age: 2};
+
+        dustbin.session.store("pets", alex);
+        dustbin.session.store("pets", izzy);
+        dustbin.session.store("pets", baal);
+
+        var cats;
+        var testQuery = function()
+        {
+            cats = dustbin.session.query("pets", {animal: "cat"});
+        };
+
+        expect(testQuery).not.toThrow();
+        expect(cats).toEqual([alex, izzy]);
+
+        var pets = dustbin.session.query("pets", {});
+        expect(pets).toEqual([alex, izzy, baal]);
     });
 });
 
