@@ -11,59 +11,116 @@
         this.storage = storage;
     } // end BinStorage
 
-    BinStorage.prototype.get = function(binName, key)
+    BinStorage.prototype.get = function(bin, key)
     {
-        var bin = this.storage[binName];
+        var binObj = this._get_bin(bin);
 
         if(key)
         {
-            if(bin)
+            if(binObj)
             {
-                var obj = bin[key];
+                var obj = binObj[key];
                 if(obj)
                 {
-                    return JSON.parse(obj);
+                    return obj;
                 }
                 else
                 {
                     console.error("Key \"%s\" not found.", key);
+                    return undefined;
                 }
             }
             else
             {
-                console.error("Bin \"%s\" not found.", binName);
+                console.error("Bin \"%s\" not found.", bin);
+                return undefined;
             } // end if
         }
         else
         {
-            return bin;
+            return binObj;
         } // end if
     }; // end get
 
-    BinStorage.store = function(binName, key, value)
+    BinStorage.prototype.store = function(bin, key, value)
     {
-        this.storage[binName] = this.storage[binName] || {};
+        var binObj = this._get_bin(bin);
 
         if(!value)
         {
             value = key;
+            var unique = false;
 
-            // Generate key
-            var hashCode = function(s)
+            while(unique)
             {
-                return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
-            }; // end hashCode
+                // Generate a new key that is highly likely to be unique.
+                key = this._generate_key();
 
-            key = window.btoa(hashCode(Math.random()));
+                if(!binObj[key])
+                {
+                    unique = true;
+                } // end if
+            } // end while
         } // end if
 
-        this.storage[binName][key] = JSON.stringify(value);
+        // Store on our bin object
+        binObj[key] = value;
+
+        // We need to replace the bin object with the modified one.
+        this._set_bin(bin, binObj);
+
+        // Return the key, in case we auto-generated one.
+        return key;
     }; // end store
+
+    BinStorage.prototype.remove = function(bin, key)
+    {
+        var binObj = this._get_bin(bin);
+
+        delete binObj[key];
+        this._set_bin(bin, binObj);
+    }; // end remove
+
+    BinStorage.prototype.removeAllKeys = function(bin)
+    {
+        delete this.storage[bin];
+    }; // end removeAllKeys
 
     BinStorage.prototype.query = function(query)
     {
         console.error("Not Implemented yet!")
     }; // end query
+
+    //-------------------------------------------------------------------------
+    // Helpers
+    //-------------------------------------------------------------------------
+
+    BinStorage.prototype._set_bin = function(bin, binObj)
+    {
+        this.storage[bin] = JSON.stringify(binObj);
+    };
+
+    BinStorage.prototype._get_bin = function(bin)
+    {
+        var binObj = this.storage[bin] || "{}";
+        return JSON.parse(binObj);
+    };
+
+    BinStorage.prototype._generate_key = function()
+    {
+        // Generate key
+        var hashCode = function(s)
+        {
+            if(typeof s != "string")
+            {
+                s = String(s);
+            } // end if
+
+            return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+        }; // end hashCode
+
+        return window.btoa(hashCode(Math.random()));
+    }; // end generate_key
 
     //------------------------------------------------------------------------------------------------------------------
 
@@ -82,13 +139,23 @@
 
     DustBin.prototype.get = function(bin, key)
     {
-        this.local.get(bin, key);
+        return this.local.get(bin, key);
     }; // end get
 
     DustBin.prototype.store = function(bin, key, value)
     {
-        this.local.store(bin, key, value);
+        return this.local.store(bin, key, value);
     }; // end store
+
+    DustBin.prototype.remove = function(bin, key)
+    {
+        return this.local.remove(bin, key);
+    }; // end remove
+
+    DustBin.prototype.removeAllKeys = function(bin)
+    {
+        return this.local.removeAllKeys(bin);
+    }; // end removeAllKeys
 
     //------------------------------------------------------------------------------------------------------------------
 
