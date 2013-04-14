@@ -8,7 +8,7 @@ my personal favoriate NoSQL.)
 
 ## Overview
 
-Dustbin has the concepts of 'bins', which are loosely analogous to databases in SQL, or collections/buckets in NoSQL.
+Dustbin has the concepts of 'bins', which are loosely analogous to tables in SQL, or collections/buckets in NoSQL.
 Basically, they are collections of objects able to be referenced by a name. (In fact, Dustbin simply uses an anonymous
 object for each bin).
 
