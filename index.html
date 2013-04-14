@@ -30,8 +30,6 @@
         <section id="main-content">
           <h1>Dustbin JS</h1>
 
-<p><a href="https://travis-ci.org/Morgul/dustbin"><img src="https://travis-ci.org/Morgul/dustbin.png?branch=master" alt="Build Status"></a></p>
-
 <p>A JSON-backed object database for your web browser. It's a light wrapper around local/session storage, designed to
 behave much like a standard NoSQL database. (In fact, it's design is heavily influenced by <a href="http://basho.com/riak/">Riak</a>,
 my personal favoriate NoSQL.)</p>
@@ -65,6 +63,20 @@ an example of basic usage:</p>
 </pre></div>
 
 <p>That's all there is to it!</p>
+
+<h3>RequireJS support</h3>
+
+<p>Recently, I've added support for RequireJS. While it's optional (and will remain so), the support seems to work very
+well. You can simply use it like any other RequireJS module:</p>
+
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s1">'dustbin'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dustbin</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Though the support has been tested (and is part of the unit tests), I still consider the RequireJS support experimental.
+If you encounter any issues, please file a ticket. (Make sure to include a test case!)</p>
 
 <h3>Auto-generated Keys</h3>
 
@@ -166,8 +178,20 @@ I have time. If you would like to implement these features, I am more than willi
 <h2>Contribution</h2>
 
 <p>As mentioned, I'm more than willing to accept pull requests. I will require you to follow
-<a href="https://github.com/Morgul/dustbin/wiki/Code-Style">my code format</a>. (I know it's not exactly standard for Javascript,
-but I find it intensely more readable than most. And, this is my project, so  deal with it.)</p>
+<a href="https://github.com/Morgul/dustbin/wiki/Code-Style">my code format</a>. I also reserve the rights to reject any features
+that rely heavily on experimental features, or lock users into one way system for using Dustbin. (There's a readon why
+the RequireJS support is optional.)</p>
+
+<h3>Reporting issues</h3>
+
+<p>I'm more than happy to have issues reported! All that I ask is a clear description of the problem, along with a test
+case. I don't have the time or inclination to wade through your application to try and discover the causes for a bug. So,
+whenever possible, please try and give me a small test case (Or, preferably, a pull-request with new unit tests that
+show the failure!)</p>
+
+<p>That all being said, don't wait to file a bug until you have a use case. I'd rather know there's a potential issue asap;
+you can feel free to file an issue, and attach the test case to it later. Just make it clear you're working on it. If
+you're having trouble isolating it, I'm more than willing to lend a hand, provided I have the time. Feel free to ask.</p>
         </section>
 
         <aside id="sidebar">
