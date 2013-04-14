@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Dustbin by Morgul</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Dustbin</h1>
+        <h2>A slim wrapper around localStorage and sessionStorage that allows for NoSQL style access. It's basically a JSON-backed object database for your web browser.</h2>
+        <a href="https://github.com/Morgul/dustbin" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>Dustbin JS</h1>
+
+<p><a href="https://travis-ci.org/Morgul/dustbin"><img src="https://travis-ci.org/Morgul/dustbin.png?branch=master" alt="Build Status"></a></p>
+
+<p>A JSON-backed object database for your web browser. It's a light wrapper around local/session storage, designed to
+behave much like a standard NoSQL database. (In fact, it's design is heavily influenced by <a href="http://basho.com/riak/">Riak</a>,
+my personal favoriate NoSQL.)</p>
+
+<h2>Overview</h2>
+
+<p>Dustbin has the concepts of 'bins', which are loosely analogous to tables in SQL, or collections/buckets in NoSQL.
+Basically, they are collections of objects able to be referenced by a name. (In fact, Dustbin simply uses an anonymous
+object for each bin).</p>
+
+<p>Inside each bin, objects are stored by key. Keys are <em>always</em> strings, but they can be any key you can set on a
+javascript object. The objects that are stored <em>must</em> be able to be turned into a JSON string. That is the only
+restriction. (Really, it's the cost of doing business with localStorage; it doesn't support storage of objects,
+only strings and integers.)</p>
+
+<h2>Usage</h2>
+
+<p>Using Dustbin is incredibly easy. When you include dustbin, it creates a new object on window, called <code>dustbin</code>. Here's
+an example of basic usage:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'foo'</span><span class="o">:</span> <span class="s2">"bar"</span><span class="p">};</span>
+
+<span class="c1">// Store the object.</span>
+<span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+
+<span class="c1">// Retrieve it by key.</span>
+<span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">);</span>
+
+<span class="c1">// Alternative syntax.</span>
+<span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">)[</span><span class="s2">"testObj"</span><span class="p">];</span>
+</pre></div>
+
+<p>That's all there is to it!</p>
+
+<h3>Auto-generated Keys</h3>
+
+<p>You're not required to have a key to store your object under. Dustbin will automatically generate a key for you if you
+don't pass one in:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'foo'</span><span class="o">:</span> <span class="s2">"bar"</span><span class="p">};</span>
+
+<span class="c1">// Store the object.</span>
+<span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+
+<span class="c1">// Key will be something like: "LTMwMzk5OTQ2MA=="</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Key:"</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>
+
+<span class="c1">// Retrieve it by key.</span>
+<span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>
+</pre></div>
+
+<h3>Retrieve entire bin object</h3>
+
+<p>You can also retrieve the entire bin object:</p>
+
+<div class="highlight"><pre><span class="nx">bin</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">);</span>
+</pre></div>
+
+<p>This allows for the alternative (and in my opinion, cleaner) syntax:</p>
+
+<div class="highlight"><pre><span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">)[</span><span class="s2">"testObj"</span><span class="p">];</span>
+</pre></div>
+
+<h3>Remove an object</h3>
+
+<p>You can remove an object by key:</p>
+
+<div class="highlight"><pre><span class="nx">dustbin</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">);</span>
+</pre></div>
+
+<h3>Remove all objects in a bin</h3>
+
+<p>You can even remove all objects from a bin:</p>
+
+<div class="highlight"><pre><span class="nx">dustbin</span><span class="p">.</span><span class="nx">removeAllKeys</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">);</span>
+</pre></div>
+
+<h3>Basic Query support</h3>
+
+<p>Currently, only basic query support has been added. You will need to construct an object containing <code>key</code> and <code>value</code>
+where you want back a list of object that have <code>key</code> equal to <code>value</code>. Here's an example:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">alex</span> <span class="o">=</span> <span class="p">{</span><span class="nx">animal</span><span class="o">:</span><span class="s2">"cat"</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"alex"</span><span class="p">,</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">4</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">izzy</span> <span class="o">=</span> <span class="p">{</span><span class="nx">animal</span><span class="o">:</span><span class="s2">"cat"</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"izzy"</span><span class="p">,</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">4</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">baal</span> <span class="o">=</span> <span class="p">{</span><span class="nx">animal</span><span class="o">:</span><span class="s2">"snake"</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"baal"</span><span class="p">,</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">2</span><span class="p">};</span>
+
+<span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"pets"</span><span class="p">,</span> <span class="nx">alex</span><span class="p">);</span>
+<span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"pets"</span><span class="p">,</span> <span class="nx">izzy</span><span class="p">);</span>
+<span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"pets"</span><span class="p">,</span> <span class="nx">baal</span><span class="p">);</span>
+
+<span class="c1">// `cats` will be equal to `[alex, izzy]`</span>
+<span class="kd">var</span> <span class="nx">cats</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s2">"pets"</span><span class="p">,</span> <span class="p">{</span><span class="nx">animal</span><span class="o">:</span> <span class="s2">"cat"</span><span class="p">});</span>
+
+<span class="c1">// `pets` will be equal to `[alex, izzy, baal]`</span>
+<span class="kd">var</span> <span class="nx">pets</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s2">"pets"</span><span class="p">,</span> <span class="p">{});</span>
+</pre></div>
+
+<p>Right now the only thing supported is pure <em>equality</em>, <strong>not</strong> <em>equivalence</em>. Also, this is basically two nested <code>forEach</code>
+calls, so performance isn't as good as it could be. I'll be looking at improving this in the future, but for now it
+should meet most needs.</p>
+
+<h3>Session store support</h3>
+
+<p>All operations can also be done on the session store. By default, the <code>dustbin</code> object's functions are simply wrappers
+for <code>dustbin.local</code>. As such, you can also access the session store by using: <code>dustbin.session</code>. Here's some examples:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'foo'</span><span class="o">:</span> <span class="s2">"bar"</span><span class="p">};</span>
+
+<span class="c1">// Store the object.</span>
+<span class="nx">dustbin</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+
+<span class="c1">// Retrieve it by key.</span>
+<span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">);</span>
+
+<span class="c1">// Alternative syntax.</span>
+<span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">)[</span><span class="s2">"testObj"</span><span class="p">];</span>
+</pre></div>
+
+<p>As you can see, it supports all the same operations as the local storage functions. There is absolutely no difference,
+except the inherent difference of session storage (all objects only last for the duration of the browser session.)</p>
+
+<h2>Status</h2>
+
+<p>Currently, all unit tests pass, and the basic functionality is there. You can get, remove and store objects by key.
+There is also basic query support, which I estimate will work for 70% of most use cases. As near as I can tell, this
+code is simple enough it can be used in a production site.</p>
+
+<p>That being said, I would very much like to add support for <a href="http://docs.basho.com/riak/latest/tutorials/querying/MapReduce/">map/reduce</a>
+and a <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/#id4">django-like query api</a>. I will work on that as
+I have time. If you would like to implement these features, I am more than willing to accept pull requests.</p>
+
+<h2>Contribution</h2>
+
+<p>As mentioned, I'm more than willing to accept pull requests. I will require you to follow
+<a href="https://github.com/Morgul/dustbin/wiki/Code-Style">my code format</a>. (I know it's not exactly standard for Javascript,
+but I find it intensely more readable than most. And, this is my project, so  deal with it.)</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/Morgul/dustbin/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/Morgul/dustbin/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/Morgul/dustbin"></a> is maintained by <a href="https://github.com/Morgul">Morgul</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
