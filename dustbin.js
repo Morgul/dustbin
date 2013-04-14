@@ -66,7 +66,7 @@
             value = key;
             var unique = false;
 
-            while(unique)
+            while(!unique)
             {
                 // Generate a new key that is highly likely to be unique.
                 key = this._generate_key();
