@@ -30,7 +30,7 @@ Currently, here is an example `$metadata` object:
 ```javascript
 {
     key: "someKey",
-    bin: "someBucket",
+    bin: "someBin",
     created: "Tue Apr 15 2013 23:05:42 GMT-0500 (CDT)",
     updated: "Tue Apr 16 2013 09:01:38 GMT-0500 (CDT)"
 }
