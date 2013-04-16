@@ -45,6 +45,29 @@ javascript object. The objects that are stored <em>must</em> be able to be turne
 restriction. (Really, it's the cost of doing business with localStorage; it doesn't support storage of objects,
 only strings and integers.)</p>
 
+<h3>Metadata support</h3>
+
+<p>Dustbin does modify the stored objects <em>slightly</em>. In each object, it adds a key called <code>$metadata</code>, which stores useful
+information about the object, such as the key, and the bucket it was saved in, or the creation time. This object is for
+both internal use, as well as providing possibly useful data to the user. You may store whatever additional data you
+would like in the object; just be aware that whenever the object is stored, Dustbin will always override <code>key</code>,
+<code>bucket</code>, and <code>updated</code>.</p>
+
+<p>Currently, here is an example <code>$metadata</code> object:</p>
+
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="nx">key</span><span class="o">:</span> <span class="s2">"someKey"</span><span class="p">,</span>
+    <span class="nx">bin</span><span class="o">:</span> <span class="s2">"someBin"</span><span class="p">,</span>
+    <span class="nx">created</span><span class="o">:</span> <span class="s2">"Tue Apr 15 2013 23:05:42 GMT-0500 (CDT)"</span><span class="p">,</span>
+    <span class="nx">updated</span><span class="o">:</span> <span class="s2">"Tue Apr 16 2013 09:01:38 GMT-0500 (CDT)"</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>It should be noted that <code>created</code> and <code>updated</code> are <em>always</em> strings. You can turn them into <code>Date</code> objects trivially:</p>
+
+<div class="highlight"><pre>    <span class="kd">var</span> <span class="nx">createdDate</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">$metadata</span><span class="p">.</span><span class="nx">created</span><span class="p">);</span>
+</pre></div>
+
 <h2>Usage</h2>
 
 <p>Using Dustbin is incredibly easy. When you include dustbin, it creates a new object on window, called <code>dustbin</code>. Here's
@@ -54,6 +77,9 @@ an example of basic usage:</p>
 
 <span class="c1">// Store the object.</span>
 <span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+
+<span class="c1">// Store an object if it already contains metadata.</span>
+<span class="nx">dustbin</span><span class="p">.</span><span class="nx">store</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
 
 <span class="c1">// Retrieve it by key.</span>
 <span class="nx">obj</span> <span class="o">=</span> <span class="nx">dustbin</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"testBin"</span><span class="p">,</span> <span class="s2">"testObj"</span><span class="p">);</span>
