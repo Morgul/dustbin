@@ -69,6 +69,37 @@ describe("DustBin Session Store", function()
         expect(obj).toEqual(testObj);
     });
 
+    it("generates correct metadata for stored objects.", function()
+    {
+        var testObj = {foo:"bar"};
+        var key = dustbin.session.store("test_bin", "test_key", testObj) ;
+
+        var obj = dustbin.session.get("test_bin", key);
+
+        expect(obj.$metadata).toBeDefined();
+        expect(obj.$metadata.key).toBe(key);
+        expect(obj.$metadata.bin).toBe("test_bin");
+        expect(typeof obj.$metadata.created).toBe("string");
+        expect(typeof obj.$metadata.updated).toBe("string");
+    });
+
+    it("allows direct storage of objects with metadata.", function()
+    {
+        var testObj = {foo:"bar"};
+        var key = dustbin.session.store("test_bin", "test_key", testObj) ;
+        var obj = dustbin.session.get("test_bin", key);
+
+        var newObj;
+        var testObjStore = function()
+        {
+            dustbin.session.store(obj);
+            newObj = dustbin.session.get("test_bin", key);
+        }; // end testObjStore
+
+        expect(testObjStore).not.toThrow();
+        expect(newObj).toBeDefined();
+    });
+
     it("allows retrieval of the bin directly.", function()
     {
         var testObj = {foo:"bar"};

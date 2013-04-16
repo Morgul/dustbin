@@ -75,6 +75,60 @@ describe("DustBin", function()
         expect(obj).toEqual(testObj);
     });
 
+    it("generates correct metadata for stored objects.", function()
+    {
+        var testObj = {foo:"bar"};
+        var key = dustbin.store("test_bin", "test_key", testObj) ;
+
+        var obj = dustbin.get("test_bin", key);
+
+        expect(obj.$metadata).toBeDefined();
+        expect(obj.$metadata.key).toBe(key);
+        expect(obj.$metadata.bin).toBe("test_bin");
+        expect(typeof obj.$metadata.created).toBe("string");
+        expect(typeof obj.$metadata.updated).toBe("string");
+    });
+
+    it("updates the metadata for modified objects.", function()
+    {
+        var testObj = {foo:"bar"};
+        var key = "test_key";
+        var obj;
+
+        runs(function()
+        {
+            dustbin.store("test_bin", key, testObj) ;
+            obj = dustbin.get("test_bin", key);
+        });
+
+        waits(1000);
+
+        runs(function()
+        {
+            dustbin.store("test_bin", key, testObj) ;
+            obj = dustbin.get("test_bin", key);
+
+            expect(obj.$metadata.created).not.toEqual(obj.$metadata.updated);
+        });
+    });
+
+    it("allows direct storage of objects with metadata.", function()
+    {
+        var testObj = {foo:"bar"};
+        var key = dustbin.store("test_bin", "test_key", testObj) ;
+        var obj = dustbin.get("test_bin", key);
+
+        var newObj;
+        var testObjStore = function()
+        {
+            dustbin.store(obj);
+            newObj = dustbin.get("test_bin", key);
+        }; // end testObjStore
+
+        expect(testObjStore).not.toThrow();
+        expect(newObj).toBeDefined();
+    });
+
     it("allows retrieval of the bin directly.", function()
     {
         var testObj = {foo:"bar"};
@@ -141,7 +195,7 @@ describe("DustBin", function()
         expect(testQuery).not.toThrow();
         expect(cats).toEqual([alex, izzy]);
 
-        var pets = dustbin.query("pets", {});
+        var pets = dustbin.query("pets");
         expect(pets).toEqual([alex, izzy, baal]);
     });
 });

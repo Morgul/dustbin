@@ -59,7 +59,19 @@ function buildDustbin()
 
     BinStorage.prototype.store = function(bin, key, value)
     {
+        // Get the bin object.
         var binObj = this._get_bin(bin);
+
+        // I fucking HATE the arguments object.
+        var args = Array.prototype.slice.call(arguments, 0);
+        args = args.filter(function(item){ return item != null});
+
+        if(args.length == 1)
+        {
+            value = args[0];
+            bin = value.$metadata.bin;
+            key = value.$metadata.key;
+        } // end if
 
         if(!value)
         {
@@ -78,11 +90,8 @@ function buildDustbin()
             } // end while
         } // end if
 
-        // Store on our bin object
-        binObj[key] = value;
-
-        // We need to replace the bin object with the modified one.
-        this._set_bin(bin, binObj);
+        // Store the value, setting metadata, etc.
+        this._store(bin, binObj, key, value);
 
         // Return the key, in case we auto-generated one.
         return key;
@@ -163,6 +172,32 @@ function buildDustbin()
 
         return window.btoa(hashCode(Math.random()));
     }; // end generate_key
+
+    BinStorage.prototype._build_metadata = function(value)
+    {
+        var metadata = value.$metadata || {};
+
+        metadata.created = metadata.created || new Date().toString();
+        metadata.updated = new Date().toString();
+
+        value.$metadata = metadata;
+
+        return value;
+    }; // end if
+
+    BinStorage.prototype._store = function(bin, binObj, key, value)
+    {
+        // Generate metadata for object.
+        value = this._build_metadata(value);
+        value.$metadata.bin = bin;
+        value.$metadata.key = key;
+
+        // Store on our bin object
+        binObj[key] = value;
+
+        // We need to replace the bin object with the modified one.
+        this._set_bin(bin, binObj);
+    }; // end _store
 
     //------------------------------------------------------------------------------------------------------------------
 

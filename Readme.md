@@ -17,6 +17,31 @@ javascript object. The objects that are stored _must_ be able to be turned into 
 restriction. (Really, it's the cost of doing business with localStorage; it doesn't support storage of objects,
 only strings and integers.)
 
+### Metadata support
+
+Dustbin does modify the stored objects _slightly_. In each object, it adds a key called `$metadata`, which stores useful
+information about the object, such as the key, and the bucket it was saved in, or the creation time. This object is for
+both internal use, as well as providing possibly useful data to the user. You may store whatever additional data you
+would like in the object; just be aware that whenever the object is stored, Dustbin will always override `key`,
+`bucket`, and `updated`.
+
+Currently, here is an example `$metadata` object:
+
+```javascript
+{
+    key: "someKey",
+    bin: "someBucket",
+    created: "Tue Apr 15 2013 23:05:42 GMT-0500 (CDT)",
+    updated: "Tue Apr 16 2013 09:01:38 GMT-0500 (CDT)"
+}
+```
+
+It should be noted that `created` and `updated` are _always_ strings. You can turn them into `Date` objects trivially:
+
+```javascript
+    var createdDate = new Date(obj.$metadata.created);
+```
+
 ## Usage
 
 Using Dustbin is incredibly easy. When you include dustbin, it creates a new object on window, called `dustbin`. Here's
@@ -27,6 +52,9 @@ var obj = {'foo': "bar"};
 
 // Store the object.
 dustbin.store("testBin", "testObj", obj);
+
+// Store an object if it already contains metadata.
+dustbin.store(obj);
 
 // Retrieve it by key.
 obj = dustbin.get("testBin", "testObj");
