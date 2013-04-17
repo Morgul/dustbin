@@ -112,6 +112,25 @@ describe("DustBin", function()
         });
     });
 
+    it("allows storage of objects with metadata, when specifying bucket..", function()
+    {
+        var testObj = {foo:"bar"};
+        var key = dustbin.store("test_bin", "test_key", testObj) ;
+        var obj = dustbin.get("test_bin", key);
+
+        var newObj;
+        var testObjStore = function()
+        {
+            dustbin.store("test_bin", obj);
+            newObj = dustbin.get("test_bin", key);
+        }; // end testObjStore
+
+        expect(testObjStore).not.toThrow();
+        expect(newObj).toBeDefined();
+        expect(newObj).toEqual(obj);
+
+    });
+
     it("allows direct storage of objects with metadata.", function()
     {
         var testObj = {foo:"bar"};

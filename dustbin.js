@@ -76,18 +76,28 @@ function buildDustbin()
         if(!value)
         {
             value = key;
-            var unique = false;
+            key = undefined;
 
-            while(!unique)
+            if(value.$metadata)
             {
-                // Generate a new key that is highly likely to be unique.
-                key = this._generate_key();
+                key = value.$metadata.key;
+            } // end if
 
-                if(!binObj[key])
+            if(!key)
+            {
+                var unique = false;
+
+                while(!unique)
                 {
-                    unique = true;
-                } // end if
-            } // end while
+                    // Generate a new key that is highly likely to be unique.
+                    key = this._generate_key();
+
+                    if(!binObj[key])
+                    {
+                        unique = true;
+                    } // end if
+                } // end while
+            } // else
         } // end if
 
         // Store the value, setting metadata, etc.
