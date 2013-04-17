@@ -59,9 +59,6 @@ function buildDustbin()
 
     BinStorage.prototype.store = function(bin, key, value)
     {
-        // Get the bin object.
-        var binObj = this._get_bin(bin);
-
         // I fucking HATE the arguments object.
         var args = Array.prototype.slice.call(arguments, 0);
         args = args.filter(function(item){ return item != null});
@@ -72,6 +69,9 @@ function buildDustbin()
             bin = value.$metadata.bin;
             key = value.$metadata.key;
         } // end if
+
+        // Get the bin object.
+        var binObj = this._get_bin(bin);
 
         if(!value)
         {

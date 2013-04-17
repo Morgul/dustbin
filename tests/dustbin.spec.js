@@ -217,6 +217,24 @@ describe("DustBin", function()
         var pets = dustbin.query("pets");
         expect(pets).toEqual([alex, izzy, baal]);
     });
+
+		it("does not loose data when re-storing an object", function()
+		{
+			var firstObj = {pos:1};
+			var secondObj = {pos:2};
+
+			dustbin.store('multi-test', firstObj);
+			dustbin.store('multi-test', secondObj);
+			objs = dustbin.query('multi-test');
+
+			objs[0].newKey = 'new';
+			dustbin.store(objs[0]);
+
+			objs2 = dustbin.query('multi-test');
+			expect(objs2.length).toEqual(2);
+			expect(objs2[0].pos).toEqual(1);
+			expect(objs2[1].pos).toEqual(2);
+		});
 });
 
 //----------------------------------------------------------------------------------------------------------------------
